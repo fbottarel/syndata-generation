@@ -94,7 +94,8 @@ def get_list_of_images(root_dir, N=1):
     Returns:
         list: List of images(with paths) that will be put in the dataset
     '''
-    img_list = glob.glob(os.path.join(root_dir, '*/*.jpg'))
+    #img_list = glob.glob(os.path.join(root_dir, '*/*.jpg'))
+    img_list = glob.glob(os.path.join(root_dir, '*/*.ppm'))
     img_list_f = []
     for i in xrange(N):
         # sample len(img_list) unique images from the list
@@ -110,9 +111,19 @@ def get_mask_file(img_file):
     Args:
         img_file(string): Image name
     Returns:
-        string: Correpsonding mask file path
+        string: Corresponding mask file path
     '''
-    mask_file = img_file.replace('.jpg','.pbm')
+
+    #   Different formats require different switcheroos
+
+    extension_replacement = {
+        '.jpg' : '.pbm',
+        '.ppm' : '.pgm'
+    }
+
+    img_name, img_extension = os.path.splitext(img_file)
+    mask_file = img_file.replace(img_extension, extension_replacement[img_extension])
+
     return mask_file
 
 def get_labels(imgs):
